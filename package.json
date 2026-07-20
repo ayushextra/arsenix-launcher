@@ -1,0 +1,65 @@
+{
+  "name": "arsenix-launcher",
+  "version": "1.0.0",
+  "description": "Arsenix Launcher - Premium Minecraft Launcher",
+  "main": "main.js",
+  "author": "ReducedG",
+  "license": "GPL-3.0",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "tech.arsenix.launcher",
+    "productName": "Arsenix Launcher",
+    "publish": null,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "javaManager.js",
+      "fabricManager.js",
+      "crashAnalyzer.js",
+      "index.html",
+      "style.css",
+      "renderer.js",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "installerSidebar": "assets/installerSidebar.bmp",
+      "uninstallerSidebar": "assets/uninstallerSidebar.bmp",
+      "artifactName": "Arsenix-Launcher-Setup-${version}.${ext}",
+      "shortcutName": "Arsenix Launcher"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.png"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "msmc": "^5.0.5",
+    "minecraft-launcher-core": "^3.18.2",
+    "electron-store": "^8.2.0",
+    "extract-zip": "^2.0.1",
+    "discord-rpc": "^4.0.1"
+  }
+}

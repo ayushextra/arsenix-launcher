@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Arsenix Launcher</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="void">
+  <div id="theme-transition-overlay" class="theme-transition-overlay"></div>
+  <canvas id="stars"></canvas>
+  <div class="bg-planet">
+    <div class="planet-ring"></div>
+    <div class="planet-ring planet-ring-inner"></div>
+    <div class="planet-sphere"></div>
+  </div>
+  <div id="cursor-glow"></div>
+
+  <!-- SPLASH SCREEN -->
+  <section id="screen-splash" class="screen splash">
+    <div class="splash-ring-wrap">
+      <img src="assets/splash-logo.png" class="splash-logo" />
+      <div class="splash-ring"></div>
+      <div class="splash-ring splash-ring-outer"></div>
+    </div>
+    <div class="splash-title">ARSENIX</div>
+  </section>
+
+  <!-- Custom titlebar -->
+  <div class="titlebar hidden" id="titlebar">
+    <div class="titlebar-brand">
+      <img src="assets/logo.png" class="titlebar-logo" />
+      <span>ARSENIX</span>
+    </div>
+    <div class="titlebar-controls">
+      <button id="btn-min">&#8211;</button>
+      <button id="btn-close">&#10005;</button>
+    </div>
+  </div>
+
+  <!-- LOGIN SCREEN -->
+  <section id="screen-login" class="screen hidden">
+    <div class="login-card">
+      <img src="assets/logo.png" class="login-logo" />
+      <h1>ARSENIX</h1>
+      <p class="tagline">Premium access only. Sign in with your Microsoft account.</p>
+      <button id="btn-login" class="btn-primary">
+        <span class="btn-label">Sign in with Microsoft</span>
+      </button>
+      <p id="login-error" class="error-text"></p>
+    </div>
+  </section>
+
+  <!-- HOME SCREEN -->
+  <section id="screen-home" class="screen hidden">
+    <aside class="sidebar">
+      <div class="profile" id="profile-toggle">
+        <div class="avatar-wrap">
+          <img id="player-avatar" class="avatar" src="" />
+          <span class="avatar-drone"></span>
+        </div>
+        <div>
+          <div id="player-name" class="player-name">Player</div>
+          <span class="link-btn">Switch account &#9662;</span>
+        </div>
+      </div>
+
+      <div id="account-dropdown" class="account-dropdown hidden">
+        <div class="account-dropdown-title">Accounts</div>
+        <div id="account-list" class="account-list"></div>
+        <button id="btn-add-account" class="account-add">+ Add account</button>
+        <button id="btn-logout" class="account-signout">Sign out of all</button>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-tab="play">Play</button>
+        <button class="nav-item" data-tab="news">News</button>
+        <button class="nav-item" data-tab="mods">Mods</button>
+        <button class="nav-item" data-tab="respacks">Resource Packs</button>
+        <button class="nav-item" data-tab="music">Music</button>
+        <button class="nav-item" data-tab="settings">Settings</button>
+      </nav>
+
+      <div id="mini-player" class="mini-player hidden">
+        <button id="mini-play-pause" class="mini-play-btn">&#9658;</button>
+        <div class="mini-player-info">
+          <div id="mini-track-name" class="mini-track-name">No track</div>
+          <div class="mini-progress-track">
+            <div id="mini-progress-fill" class="mini-progress-fill"></div>
+          </div>
+        </div>
+        <button id="mini-next" class="mini-next-btn">&#9658;&#9658;</button>
+      </div>
+
+      <div class="sidebar-footer">
+        <button id="btn-discord" class="discord-btn" title="Join our Discord">
+          <img src="assets/discord.png" alt="Discord" />
+        </button>
+        <div class="app-version">Arsenix Launcher v1.0.0</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <!-- PLAY TAB -->
+      <div id="tab-play" class="tab active show">
+        <div class="hero">
+          <div class="hero-rings"></div>
+          <h2>Ready to drop in.</h2>
+          <p>Pick a version and launch when you are.</p>
+        </div>
+
+        <div id="server-status-card" class="server-status-card">
+          <span id="server-status-dot" class="status-dot"></span>
+          <div class="server-status-text">
+            <div id="server-status-name">No server configured</div>
+            <div id="server-status-sub" class="server-status-sub">Add an address in Settings to show live status</div>
+          </div>
+        </div>
+
+        <div id="crash-banner" class="crash-banner hidden">
+          <span id="crash-reason">Minecraft closed unexpectedly.</span>
+          <button id="btn-copy-crash">Copy crash log</button>
+          <button id="btn-dismiss-crash">&#10005;</button>
+        </div>
+
+        <div class="launch-bar">
+          <div class="field">
+            <label>Version</label>
+            <select id="version-select">
+              <option value="1.21.1">1.21.1</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Loader</label>
+            <select id="loader-select">
+              <option value="vanilla">Vanilla</option>
+              <option value="fabric">Fabric</option>
+            </select>
+          </div>
+
+          <div class="field checkbox-field">
+            <label>
+              <input type="checkbox" id="show-snapshots" />
+              Show snapshots
+            </label>
+          </div>
+
+          <div class="play-orbit-wrap">
+            <div id="rocket-wrap" class="rocket-wrap">
+              <div class="rocket-body">
+                <div class="rocket-nose"></div>
+                <div class="rocket-hull"></div>
+                <div class="rocket-fin rocket-fin-left"></div>
+                <div class="rocket-fin rocket-fin-right"></div>
+                <div class="rocket-flame"></div>
+              </div>
+            </div>
+            <button id="btn-play" class="btn-play">
+              <span id="play-label">PLAY</span>
+            </button>
+            <div class="satellite"></div>
+          </div>
+        </div>
+
+        <div id="progress-wrap" class="progress-wrap hidden">
+          <div class="progress-track">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+          <div class="progress-row">
+            <div id="progress-text" class="progress-text">Preparing...</div>
+            <button id="btn-force-stop" class="force-stop-btn hidden">Force stop</button>
+          </div>
+        </div>
+
+        <div id="log-box" class="log-box hidden"></div>
+      </div>
+
+      <!-- NEWS TAB -->
+      <div id="tab-news" class="tab">
+        <h2>News</h2>
+        <div class="news-card">
+          <h3>Welcome to Arsenix</h3>
+          <p>Launcher updates and announcements will show up here.</p>
+        </div>
+      </div>
+
+      <!-- MUSIC TAB -->
+      <div id="tab-music" class="tab">
+        <h2>Music</h2>
+        <p class="tab-subtitle">Add your own local music files to play in the background while browsing the launcher. Only your own legally-owned files — no copyrighted or Minecraft soundtrack files are bundled with Arsenix.</p>
+
+        <button id="btn-add-music" class="btn-primary small">+ Add songs</button>
+
+        <div class="now-playing-card" id="now-playing-card">
+          <div class="now-playing-visual">
+            <span class="now-playing-bar"></span>
+            <span class="now-playing-bar"></span>
+            <span class="now-playing-bar"></span>
+          </div>
+          <div class="now-playing-info">
+            <div id="np-track-name" class="np-track-name">Nothing playing</div>
+            <div class="np-controls">
+              <button id="np-prev">&#9664;&#9664;</button>
+              <button id="np-play-pause">&#9658;</button>
+              <button id="np-next">&#9658;&#9658;</button>
+              <input type="range" id="np-volume" min="0" max="100" value="60" />
+            </div>
+          </div>
+        </div>
+
+        <h3 class="mods-installed-title">Playlist</h3>
+        <div id="playlist-list" class="mods-list"></div>
+      </div>
+
+      <!-- RESOURCE PACKS TAB -->
+      <div id="tab-respacks" class="tab">
+        <h2>Resource Packs</h2>
+        <p class="tab-subtitle">Add resource packs and toggle them on or off — applied automatically the next time you launch, no need to open the in-game menu.</p>
+
+        <div class="respack-toolbar">
+          <input type="text" id="respack-search-input" class="tab-search-input" placeholder="Search Modrinth for resource packs..." />
+          <button id="btn-add-local-pack" class="btn-primary small">+ Add local .zip</button>
+        </div>
+        <div id="respack-search-results" class="mods-list"></div>
+
+        <h3 class="mods-installed-title">Installed packs</h3>
+        <div id="respack-installed-list" class="mods-list"></div>
+      </div>
+
+      <!-- MODS TAB -->
+      <div id="tab-mods" class="tab">
+        <h2>Mods</h2>
+        <p class="tab-subtitle">Search and install Fabric mods for your selected version. Switch Loader to "Fabric" on the Play tab to use them.</p>
+
+        <div class="mods-search-row">
+          <input type="text" id="mods-search-input" placeholder="Search Modrinth for mods..." />
+        </div>
+        <div id="mods-search-results" class="mods-list"></div>
+
+        <h3 class="mods-installed-title">Installed mods</h3>
+        <div id="mods-installed-list" class="mods-list"></div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div id="tab-settings" class="tab">
+        <h2>Settings</h2>
+
+        <div class="setting-row">
+          <label>Theme</label>
+          <select id="theme-select">
+            <option value="void">Void Black</option>
+            <option value="purple">Deep Purple</option>
+            <option value="nebula">Nebula Blue</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label>Server address (for status card)</label>
+          <input type="text" id="server-address" placeholder="play.example.net" />
+        </div>
+
+        <div class="setting-row">
+          <label>Allocated RAM: <span id="ram-value">4</span> GB <span id="ram-total-label" class="ram-total-label"></span></label>
+          <input type="range" id="ram-slider" min="1" max="16" step="1" value="4" />
+        </div>
+
+        <div class="setting-row">
+          <label>Game directory</label>
+          <input type="text" id="game-dir" readonly />
+        </div>
+
+        <div class="setting-row checkbox-row">
+          <label>
+            <input type="checkbox" id="close-on-launch" />
+            Close launcher when game starts
+          </label>
+        </div>
+
+        <div class="setting-row checkbox-row">
+          <label>
+            <input type="checkbox" id="sound-effects" />
+            Interface sound effects
+          </label>
+        </div>
+
+        <div class="setting-row checkbox-row">
+          <label>
+            <input type="checkbox" id="discord-presence" />
+            Show activity on Discord
+          </label>
+        </div>
+
+        <div class="setting-row checkbox-row">
+          <label>
+            <input type="checkbox" id="performance-mode" />
+            Performance mode (recommended JVM flags — reduces stutter)
+          </label>
+        </div>
+
+        <div class="setting-row checkbox-row">
+          <label>
+            <input type="checkbox" id="low-end-preset" />
+            Low-end FPS boost preset (lowers render distance & graphics)
+          </label>
+        </div>
+
+        <button id="btn-save-settings" class="btn-primary small">Save settings</button>
+      </div>
+    </main>
+  </section>
+
+  <audio id="audio-player"></audio>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
